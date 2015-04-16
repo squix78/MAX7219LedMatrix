@@ -33,9 +33,10 @@ void loop() {
 }
 ```
 
-# Connecting the modules to your ESP8266
+## Connecting the modules to your ESP8266
+
 |Led Matrix |	ESP8266                     |
--------------------------------------------
+|-----------|-----------------------------|
 |VCC        |	+3.3V                       |
 |GND	      | GND                         |
 |DIN	      |GPIO13 (HSPID)               |
