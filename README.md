@@ -6,6 +6,8 @@ This library leds you display text and set specific pixels on multiple 8x8 led m
   You can find modules here: http://www.banggood.com/2Pcs-MAX7219-Dot-Matrix-MCU-LED-Display-Control-Module-Kit-For-Arduino-p-945280.html?p=0P21061109440201501M (<-Affiliate link)
   
   Currently you can set pixels, write text with a simple font and scroll it left or right or have it oscillate between the two ends.
+  
+Also see: http://blog.squix.ch/2015/04/esp8266arduino-max7219-8x8-led-matrix.html
 
 ```  
 #include <SPI.h>
