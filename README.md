@@ -32,3 +32,12 @@ void loop() {
   delay(200);
 }
 ```
+
+# Connecting the modules to your ESP8266
+|Led Matrix |	ESP8266                     |
+-------------------------------------------
+|VCC        |	+3.3V                       |
+|GND	      | GND                         |
+|DIN	      |GPIO13 (HSPID)               |
+|CS	        |Choose free GPIO, e.g. GPIO2 |
+|CLK	      |GPIO14 (HSPICLK)             |
