@@ -1,13 +1,13 @@
 #include <SPI.h>
 #include "LedMatrix.h"
 
-LedMatrix ledMatrix;
-#define NUMBER_OF_DEVICES 2
-#define CS_PIN 2
 
+#define NUMBER_OF_DEVICES 6
+#define CS_PIN 2
+LedMatrix ledMatrix = LedMatrix(NUMBER_OF_DEVICES, CS_PIN);
   
 void setup() {
-  ledMatrix.init(NUMBER_OF_DEVICES, CS_PIN);
+  ledMatrix.init();
 
   ledMatrix.setText("MAX7219 Animation Demo");
 }
@@ -15,8 +15,8 @@ void setup() {
 void loop() {
 
   ledMatrix.clear();
-  ledMatrix.oscillateText();
+  ledMatrix.scrollTextLeft();
   ledMatrix.drawText();
   ledMatrix.commit();
-  delay(200);
+  delay(50);
 }

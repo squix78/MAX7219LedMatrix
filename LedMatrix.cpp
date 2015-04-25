@@ -3,17 +3,22 @@
 #include "LedMatrix.h"
 #include "cp437font.h"
 
+LedMatrix::LedMatrix(byte numberOfDevices, byte slaveSelectPin) {
+  myNumberOfDevices = numberOfDevices;
+  mySlaveSelectPin = slaveSelectPin;
+  cols = new byte[numberOfDevices * 8];
+}
 /**
 *  numberOfDevices: how many modules are daisy changed togehter
 *  slaveSelectPin: which pin is controlling the CS/SS pin of the first module?
 */
-void LedMatrix::init(byte numberOfDevices, byte slaveSelectPin) {
-  myNumberOfDevices = numberOfDevices;
-  mySlaveSelectPin = slaveSelectPin;
-  
+void LedMatrix::init() {
+
   pinMode(mySlaveSelectPin, OUTPUT);
   
   SPI.begin ();
+  SPI.setDataMode(SPI_MODE3);
+  SPI.setClockDivider(SPI_CLOCK_DIV128);
   for(byte device = 0; device < myNumberOfDevices; device++) {
     sendByte (device, MAX7219_REG_SCANLIMIT, 7);   // show all 8 digits
     sendByte (device, MAX7219_REG_DECODEMODE, 0);  // using an led matrix (not digits)
@@ -40,10 +45,9 @@ void LedMatrix::sendByte (const byte device, const byte reg, const byte data) {
   //Now shift out the data 
   for(int i=0;i<myNumberOfDevices;i++) {
     SPI.transfer (spiregister[i]);
-    SPI.transfer (spidata[i]);      
+    SPI.transfer (spidata[i]); 
   }
-  digitalWrite (mySlaveSelectPin, HIGH); 
-
+  digitalWrite (mySlaveSelectPin, HIGH);    
 
 }  // end of sendByte
  

@@ -20,8 +20,8 @@ class LedMatrix {
   
   public: 
 
-    
-    void init(byte numberOfDisplays, byte slaveSelectPin);
+    LedMatrix(byte numberOfDisplays, byte slaveSelectPin);
+    void init();
     void sendByte (const byte device, const byte reg, const byte data);
     void setPixel(byte x, byte y);
     void clear();
@@ -34,7 +34,7 @@ class LedMatrix {
     void oscillateText();
     
   private:
-    byte cols[16]; // allocate dynamically
+    byte* cols;
     byte spiregister[8];
     byte spidata[8];
     String myText;
