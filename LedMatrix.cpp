@@ -71,11 +71,19 @@ void LedMatrix::setText(String text) {
   myTextOffset = 0;
 }
 
+void LedMatrix::setNextText(String nextText) {
+  myNextText = nextText;
+}
+
 void LedMatrix::scrollTextRight() {
    myTextOffset = (myTextOffset + 1) % ((int)myText.length() * 7 - 5); 
 }
 void LedMatrix::scrollTextLeft() {
-   myTextOffset = (myTextOffset - 1) % ((int)myText.length() * 7 - 5); 
+   myTextOffset = (myTextOffset - 1) % ((int)myText.length() * 7 + myNumberOfDevices * 8);
+   if (myTextOffset == 0 && myNextText != NULL) {
+      myText = myNextText;
+      myNextText = NULL;
+   }
 }
 
 void LedMatrix::oscillateText() {
@@ -99,7 +107,7 @@ void LedMatrix::drawText() {
   for (int i = 0; i < myText.length(); i++) {
     letter = myText.charAt(i);
     for (byte col = 0; col < 8; col++) {
-      position = i * 7 + col + myTextOffset;
+      position = i * 7 + col + myTextOffset + myNumberOfDevices * 8;
       if (position >= 0 && position < myNumberOfDevices * 8) {
         setColumn(position, pgm_read_byte (&cp437_font [letter] [col]));
       }
