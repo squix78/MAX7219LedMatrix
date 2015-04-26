@@ -16,6 +16,11 @@
 #define MAX7219_REG_SHUTDOWN     0xC
 #define MAX7219_REG_DISPLAYTEST  0xF
 
+#define TEXT_ALIGN_LEFT          0 // Text is aligned to left side of the display
+#define TEXT_ALIGN_LEFT_END      1 // Beginning of text is just outside the right end of the display
+#define TEXT_ALIGN_RIGHT         2 // End of text is aligned to the right of the display
+#define TEXT_ALIGN_RIGHT_END     3 // End of text is just outside the left side of the display
+
 class LedMatrix {
   
   public: 
@@ -33,9 +38,34 @@ class LedMatrix {
     void init();
 
     /**
+    * Sets the intensity on all devices.
+    * intensity: 0-15
+    */
+    void setIntensity(byte intensity);
+
+    /**
+    * Sets the width in pixels for one character. 
+    * Default is 7.
+    */
+    void setCharWidth(byte charWidth);
+
+    /**
+    * Sets the text alignment. 
+    * Default is TEXT_ALIGN_LEFT_END.
+    * 
+    */ 
+    void setTextAlignment(byte textAlignment);
+
+    /**
     * Send a byte to a specific device.
     */
     void sendByte (const byte device, const byte reg, const byte data);
+
+
+    /**
+    * Send a byte to all devices (convenience method).
+    */
+    void sendByte (const byte reg, const byte data);
 
     /**
     * Turn on pixel at position (x,y).
@@ -95,8 +125,14 @@ class LedMatrix {
     String myText;
     String myNextText;
     int myTextOffset = 1;
+    int myTextAlignmentOffset = 0;
     int increment = -1;
     byte myNumberOfDevices = 0;
     byte mySlaveSelectPin = 0;
+    byte myCharWidth = 7;
+    byte myTextAlignment = 1;
+
+    void calculateTextAlignmentOffset();
+
 
 };
