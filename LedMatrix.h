@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
- // max7219 registers
+// max7219 registers
 #define MAX7219_REG_NOOP         0x0
 #define MAX7219_REG_DIGIT0       0x1
 #define MAX7219_REG_DIGIT1       0x2
@@ -22,103 +22,102 @@
 #define TEXT_ALIGN_RIGHT_END     3 // End of text is just outside the left side of the display
 
 class LedMatrix {
-  
-  public: 
-
+    
+public:
+    
     /**
-    * Constructor.
-    * numberOfDisplays: number of connected devices
-    * slaveSelectPin: CS (or SS) pin connected to your ESP8266
-    */
+     * Constructor.
+     * numberOfDisplays: number of connected devices
+     * slaveSelectPin: CS (or SS) pin connected to your ESP8266
+     */
     LedMatrix(byte numberOfDisplays, byte slaveSelectPin);
-
+    
     /**
-    * Initializes the SPI interface
-    */
+     * Initializes the SPI interface
+     */
     void init();
-
+    
     /**
-    * Sets the intensity on all devices.
-    * intensity: 0-15
-    */
+     * Sets the intensity on all devices.
+     * intensity: 0-15
+     */
     void setIntensity(byte intensity);
-
+    
     /**
-    * Sets the width in pixels for one character. 
-    * Default is 7.
-    */
+     * Sets the width in pixels for one character.
+     * Default is 7.
+     */
     void setCharWidth(byte charWidth);
-
+    
     /**
-    * Sets the text alignment. 
-    * Default is TEXT_ALIGN_LEFT_END.
-    * 
-    */ 
+     * Sets the text alignment.
+     * Default is TEXT_ALIGN_LEFT_END.
+     *
+     */
     void setTextAlignment(byte textAlignment);
-
+    
     /**
-    * Send a byte to a specific device.
-    */
+     * Send a byte to a specific device.
+     */
     void sendByte (const byte device, const byte reg, const byte data);
-
-
+    
     /**
-    * Send a byte to all devices (convenience method).
-    */
+     * Send a byte to all devices (convenience method).
+     */
     void sendByte (const byte reg, const byte data);
-
+    
     /**
-    * Turn on pixel at position (x,y).
-    */
+     * Turn on pixel at position (x,y).
+     */
     void setPixel(byte x, byte y);
-
+    
     /**
-    * Clear the frame buffer.
-    */
+     * Clear the frame buffer.
+     */
     void clear();
-
+    
     /**
-    * Draw the currently set text at the current offset.
-    */
+     * Draw the currently set text at the current offset.
+     */
     void drawText();
-
+    
     /**
-    * Set the current text.
-    */
+     * Set the current text.
+     */
     void setText(String text);
-
+    
     /**
-    * Set the text that will replace the current text after a complete scroll
-    * cycle.
-    */
+     * Set the text that will replace the current text after a complete scroll
+     * cycle.
+     */
     void setNextText(String nextText);
-
+    
     /**
-    * Set a specific column with a byte value to the framebuffer.
-    */
+     * Set a specific column with a byte value to the framebuffer.
+     */
     void setColumn(int column, byte value);
-
+    
     /**
-    * Writes the framebuffer to the displays.
-    */
+     * Writes the framebuffer to the displays.
+     */
     void commit();
-
+    
     /**
-    * Scroll the text to the right.
-    */ 
+     * Scroll the text to the right.
+     */
     void scrollTextRight();
-
+    
     /**
-    * Scroll the text to the left.
-    */
+     * Scroll the text to the left.
+     */
     void scrollTextLeft();
-
+    
     /**
-    * Oscilate the text between the two limits.
-    */
+     * Oscilate the text between the two limits.
+     */
     void oscillateText();
     
-  private:
+private:
     byte* cols;
     byte spiregister[8];
     byte spidata[8];
@@ -131,8 +130,6 @@ class LedMatrix {
     byte mySlaveSelectPin = 0;
     byte myCharWidth = 7;
     byte myTextAlignment = 1;
-
+    
     void calculateTextAlignmentOffset();
-
-
 };
