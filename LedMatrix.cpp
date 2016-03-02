@@ -80,7 +80,7 @@ void LedMatrix::calculateTextAlignmentOffset() {
             myTextAlignmentOffset = myNumberOfDevices * 8;
             break;
         case TEXT_ALIGN_RIGHT:
-            myTextAlignmentOffset = myText.length() * myCharWidth - myNumberOfDevices * 8;
+            myTextAlignmentOffset = myNumberOfDevices * 8 - myText.length() * myCharWidth;
             break;
         case TEXT_ALIGN_RIGHT_END:
             myTextAlignmentOffset = - myText.length() * myCharWidth;
