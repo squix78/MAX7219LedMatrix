@@ -93,7 +93,6 @@ void LedMatrix::calculateTextAlignmentOffset() {
 void LedMatrix::clear() {
     for (byte col = 0; col < myNumberOfDevices * 8; col++) {
         cols[col] = 0;
-		//rotatedCols[col] = 0;
     }    
 }
 
