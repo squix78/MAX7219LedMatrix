@@ -116,9 +116,15 @@ public:
      * Oscilate the text between the two limits.
      */
     void oscillateText();
+	
+	/**
+     * Enables 90° rotation for each 8x8 matrix.
+     */
+	void setRotation(bool enabled);
     
 private:
     byte* cols;
+	byte* rotatedCols;
     byte spiregister[8];
     byte spidata[8];
     String myText;
@@ -130,6 +136,8 @@ private:
     byte mySlaveSelectPin = 0;
     byte myCharWidth = 7;
     byte myTextAlignment = 1;
+	bool rotationIsEnabled = false;
     
     void calculateTextAlignmentOffset();
+	void rotateLeft();
 };
