@@ -9,6 +9,7 @@ LedMatrix::LedMatrix(byte numberOfDevices, byte slaveSelectPin) {
     myNumberOfDevices = numberOfDevices;
     mySlaveSelectPin = slaveSelectPin;
     cols = new byte[numberOfDevices * 8];
+	rotatedCols = new byte[numberOfDevices * 8];
 }
 
 /**
@@ -92,11 +93,12 @@ void LedMatrix::calculateTextAlignmentOffset() {
 void LedMatrix::clear() {
     for (byte col = 0; col < myNumberOfDevices * 8; col++) {
         cols[col] = 0;
-    }
-    
+		rotatedCols[col] = 0;
+    }    
 }
 
 void LedMatrix::commit() {
+	rotateLeft();
     for (byte col = 0; col < myNumberOfDevices * 8; col++) {
         sendByte(col / 8, col % 8 + 1, cols[col]);
     }
@@ -163,4 +165,15 @@ void LedMatrix::setColumn(int column, byte value) {
 
 void LedMatrix::setPixel(byte x, byte y) {
     bitWrite(cols[x], y, true);
+}
+
+void LedMatrix::rotateLeft() {	
+	for (byte deviceNum = 0; deviceNum < myNumberOfDevices; deviceNum++) {		
+		for(byte posY = 0; posY < 8; posY++) {
+			for(byte posX = 0; posX < 8; posX++) {
+				bitWrite(rotatedCols[8 * (deviceNum) + posY], posX, bitRead(cols[8 * (deviceNum) + 7-posX], posY));						
+			}
+		}
+	}
+	memcpy(cols, rotatedCols, myNumberOfDevices * 8);
 }

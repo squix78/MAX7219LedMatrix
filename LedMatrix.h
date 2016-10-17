@@ -119,6 +119,7 @@ public:
     
 private:
     byte* cols;
+	byte* rotatedCols;
     byte spiregister[8];
     byte spidata[8];
     String myText;
@@ -132,4 +133,5 @@ private:
     byte myTextAlignment = 1;
     
     void calculateTextAlignmentOffset();
+	void rotateLeft();
 };
