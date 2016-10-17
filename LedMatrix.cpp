@@ -93,12 +93,14 @@ void LedMatrix::calculateTextAlignmentOffset() {
 void LedMatrix::clear() {
     for (byte col = 0; col < myNumberOfDevices * 8; col++) {
         cols[col] = 0;
-		rotatedCols[col] = 0;
+		//rotatedCols[col] = 0;
     }    
 }
 
 void LedMatrix::commit() {
-	rotateLeft();
+	if ( rotationIsEnabled ) {
+		rotateLeft();
+	}
     for (byte col = 0; col < myNumberOfDevices * 8; col++) {
         sendByte(col / 8, col % 8 + 1, cols[col]);
     }
@@ -165,6 +167,10 @@ void LedMatrix::setColumn(int column, byte value) {
 
 void LedMatrix::setPixel(byte x, byte y) {
     bitWrite(cols[x], y, true);
+}
+
+void LedMatrix::setRotation(bool enabled) {
+	rotationIsEnabled = enabled;
 }
 
 void LedMatrix::rotateLeft() {	
