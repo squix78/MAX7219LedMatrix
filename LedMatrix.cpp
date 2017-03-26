@@ -97,8 +97,13 @@ void LedMatrix::clear() {
 }
 
 void LedMatrix::commit() {
-    for (byte col = 0; col < myNumberOfDevices * 8; col++) {
-        sendByte(col / 8, col % 8 + 1, cols[col]);
+    for (int deviceColumnIndex = 0; deviceColumnIndex < 8; deviceColumnIndex++) {
+        digitalWrite(mySlaveSelectPin, LOW);
+        for (int deviceIndex = 0; deviceIndex < myNumberOfDevices; deviceIndex++) {
+            SPI.transfer(deviceColumnIndex + 1);
+            SPI.transfer(cols[deviceIndex * 8 + deviceColumnIndex]);
+        }
+        digitalWrite(mySlaveSelectPin, HIGH);    
     }
 }
 
