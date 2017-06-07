@@ -1,5 +1,6 @@
 {
   "name": "MAX7219LedMatrix",
+  "version": "1.0.0",
   "keywords": "max7219, led, display",
   "description": "This library displays text and sets specific pixels on one or multiple 8x8 led matrices with a MAX7219 driver chip controlled through the SPI interface.",
   "repository":
