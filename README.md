@@ -1,3 +1,5 @@
+Original version by "squix78".
+
 # MAX7219LedMatrix
 Library for the ESP8266 on Arduino IDE displaying text on one or multiple MAX7219 8x8 led matrices.
 
@@ -13,6 +15,7 @@ Currently this library supports the following operations:
 - write text with a simple font
 - scroll text left or right 
 - oscillate text between the two ends
+- notify when the word is completely displayed
   
 You're welcome to [read in my blog](http://blog.squix.ch/2015/04/esp8266arduino-max7219-8x8-led-matrix.html) how this library came about.
 
@@ -37,6 +40,7 @@ void loop() {
   ledMatrix.clear();
   ledMatrix.scrollTextLeft();
   ledMatrix.drawText();
+  //int a = ledMatrix.scrollEnd();  // it return 1 when the word is completely displayed
   ledMatrix.commit(); // commit transfers the byte buffer to the displays
   delay(200);
 }
