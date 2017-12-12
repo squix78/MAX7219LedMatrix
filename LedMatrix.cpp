@@ -9,6 +9,7 @@ LedMatrix::LedMatrix(byte numberOfDevices, byte slaveSelectPin) {
         myNumberOfDevices = numberOfDevices;
         mySlaveSelectPin = slaveSelectPin;
         cols = new byte[numberOfDevices * 8];
+        xcols = new byte[numberOfDevices * 8];
 }
 
 /**
@@ -45,17 +46,10 @@ void LedMatrix::sendByte (const byte device, const byte reg, const byte data) {
         digitalWrite(mySlaveSelectPin,LOW);
         // now shift out the data
         for(int i=0; i<myNumberOfDevices; i++) {
-                if(spidata[i] == 0) {
-                        n=n+1;
-                        if(n == 7*myNumberOfDevices) scroll++;
-                        else scroll=0;
-                }
-                else n=0;
                 SPI.transfer (spiregister[i]);
                 SPI.transfer (spidata[i]);
         }
         digitalWrite (mySlaveSelectPin, HIGH);
-
 }
 
 void LedMatrix::sendByte (const byte reg, const byte data) {
@@ -103,8 +97,30 @@ void LedMatrix::clear() {
 }
 
 void LedMatrix::commit() {
-        for (byte col = 0; col < myNumberOfDevices * 8; col++) {
-                sendByte(col / 8, col % 8 + 1, cols[col]);
+        // for (byte col = 0; col < myNumberOfDevices * 8; col++) {
+        //         sendByte(col / 8, col % 8 + 1, cols[col]);
+        // }
+
+        byte index = B0000001;
+        byte col;
+        //byte xcols[];
+
+        if(deviceOrientation == 0) {
+                for (col = 0; col < myNumberOfDevices * 8; col++) {
+                        sendByte(col / 8, col % 8 + 1, cols[col]);
+                }
+        } else if(deviceOrientation == 1) {   // orient the device vertically
+                for (col = 0; col < myNumberOfDevices * 8; col++) {
+                        xcols[col] = 0;
+                }
+                // little inefficient, can be enhanced, rotate the matrix !
+                for (col = 0; col < myNumberOfDevices * 8; col++) {
+
+                        for(byte bits = 0; bits < 8; bits++)
+                                xcols[col] |= ((cols[bits + 8*(col/8)] & (index << (col%8))) ?
+                                               (B10000000 >> bits) : 0);
+                        sendByte(col / 8, col % 8 + 1, xcols[col]);
+                }
         }
 }
 
@@ -172,5 +188,10 @@ void LedMatrix::setPixel(byte x, byte y) {
 }
 
 bool LedMatrix::scrollEnd(){
-        return scroll;
+        int maxColumns = (int)myText.length() * myCharWidth;
+        byte maxDisplayColumns = myNumberOfDevices * 8;
+
+        if (myTextOffset == 0) return 1;
+
+        else return 0;
 }

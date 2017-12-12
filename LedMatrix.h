@@ -124,6 +124,7 @@ bool scrollEnd();
 
 private:
 byte* cols;
+byte* xcols;
 byte spiregister[8];
 byte spidata[8];
 String myText;
@@ -135,8 +136,7 @@ byte myNumberOfDevices = 0;
 byte mySlaveSelectPin = 0;
 byte myCharWidth = 7;
 byte myTextAlignment = 1;
-byte n=0;
-bool scroll = 0;
+bool deviceOrientation = 1; // 1 is vertical - 0 is horizontal
 
 void calculateTextAlignmentOffset();
 };
