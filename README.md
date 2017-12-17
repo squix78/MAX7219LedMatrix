@@ -7,16 +7,18 @@ This library displays text and sets specific pixels on one or multiple 8x8 led m
 These modules are relatively cheep and can be daisy chained which makes it easy to get a led text bar up and running
 You can find modules e.g. with [Banggood](http://www.banggood.com/2Pcs-MAX7219-Dot-Matrix-MCU-LED-Display-Control-Module-Kit-For-Arduino-p-945280.html?p=0P21061109440201501M) (<-affiliate link).
 
-For details about the MAX7219 theory, wiring, schematic, etc. there's a great post by Nick Gammon: http://www.gammon.com.au/forum/?id=11516 
-  
+For details about the MAX7219 theory, wiring, schematic, etc. there's a great post by Nick Gammon: http://www.gammon.com.au/forum/?id=11516
+
 Currently this library supports the following operations:
 
 - set pixels
 - write text with a simple font
-- scroll text left or right 
+- scroll text left or right
+- translate 90°
 - oscillate text between the two ends
 - notify when the word is completely displayed
-  
+- flip string
+
 You're welcome to [read in my blog](http://blog.squix.ch/2015/04/esp8266arduino-max7219-8x8-led-matrix.html) how this library came about.
 
 ## Example
