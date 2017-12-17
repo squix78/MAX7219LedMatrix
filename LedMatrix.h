@@ -137,6 +137,7 @@ byte mySlaveSelectPin = 0;
 byte myCharWidth = 7;
 byte myTextAlignment = 1;
 bool deviceOrientation = 1; // 1 is vertical - 0 is horizontal
+bool flip = 0; //
 
 void calculateTextAlignmentOffset();
 };

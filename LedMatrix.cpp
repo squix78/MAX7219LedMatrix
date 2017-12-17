@@ -39,9 +39,10 @@ void LedMatrix::sendByte (const byte device, const byte reg, const byte data) {
                 spidata[i] = (byte)0;
                 spiregister[i] = (byte)0;
         }
-        // put our device data into the array
+// put our device data into the array
         spiregister[offset] = reg;
         spidata[offset] = data;
+
         // enable the line
         digitalWrite(mySlaveSelectPin,LOW);
         // now shift out the data
@@ -109,16 +110,17 @@ void LedMatrix::commit() {
                 for (col = 0; col < myNumberOfDevices * 8; col++) {
                         sendByte(col / 8, col % 8 + 1, cols[col]);
                 }
-        } else if(deviceOrientation == 1) {   // orient the device vertically
+        }
+        else if(deviceOrientation == 1 ) {    // orient the device vertically
                 for (col = 0; col < myNumberOfDevices * 8; col++) {
                         xcols[col] = 0;
                 }
                 // little inefficient, can be enhanced, rotate the matrix !
                 for (col = 0; col < myNumberOfDevices * 8; col++) {
-
-                        for(byte bits = 0; bits < 8; bits++)
+                        for(byte bits = 0; bits < 8; bits++) {
                                 xcols[col] |= ((cols[bits + 8*(col/8)] & (index << (col%8))) ?
                                                (B10000000 >> bits) : 0);
+                        }
                         sendByte(col / 8, col % 8 + 1, xcols[col]);
                 }
         }
@@ -170,7 +172,18 @@ void LedMatrix::drawText() {
                 for (byte col = 0; col < 8; col++) {
                         position = i * myCharWidth + col + myTextOffset + myTextAlignmentOffset;
                         if (position >= 0 && position < myNumberOfDevices * 8) {
-                                setColumn(position, pgm_read_byte (&cp437_font [letter] [col]));
+                                if (flip==0) {
+                                        setColumn(position, pgm_read_byte (&cp437_font [letter] [col]));
+                                }
+                                else {
+                                        // flip char (byte)
+                                        byte x = pgm_read_byte (&cp437_font [letter] [col]);
+                                        // byte x = data;
+                                        x = ((x >> 1) & 0x55) | ((x << 1) & 0xaa);
+                                        x = ((x >> 2) & 0x33) | ((x << 2) & 0xcc);
+                                        x = ((x >> 4) & 0x0f) | ((x << 4) & 0xf0);
+                                        setColumn(position, x);
+                                }
                         }
                 }
         }
@@ -190,7 +203,6 @@ void LedMatrix::setPixel(byte x, byte y) {
 bool LedMatrix::scrollEnd(){
         int maxColumns = (int)myText.length() * myCharWidth;
         byte maxDisplayColumns = myNumberOfDevices * 8;
-
         if (myTextOffset == 0) return 1;
 
         else return 0;
