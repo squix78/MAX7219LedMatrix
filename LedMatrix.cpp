@@ -12,14 +12,29 @@ LedMatrix::LedMatrix(byte numberOfDevices, byte slaveSelectPin) {
 	rotatedCols = new byte[numberOfDevices * 8];
 }
 
+LedMatrix::LedMatrix(byte numberOfDevices, int8_t sck, int8_t miso, int8_t mosi, byte slaveSelectPin) {
+    myNumberOfDevices = numberOfDevices;
+    mySlaveSelectPin = slaveSelectPin;
+    cols = new byte[numberOfDevices * 8];
+    rotatedCols = new byte[numberOfDevices * 8];
+    customSpiPins = true;
+    _sck = sck;
+    _miso = miso;
+    _mosi = mosi;
+}
+
 /**
  *  numberOfDevices: how many modules are daisy changed togehter
  *  slaveSelectPin: which pin is controlling the CS/SS pin of the first module?
  */
 void LedMatrix::init() {
     pinMode(mySlaveSelectPin, OUTPUT);
-    
-    SPI.begin ();
+
+    if(customSpiPins){
+      SPI.begin ( _sck,  _miso,  _mosi,  mySlaveSelectPin);
+    } else {
+      SPI.begin ();
+    }
     SPI.setDataMode(SPI_MODE0);
     SPI.setClockDivider(SPI_CLOCK_DIV128);
     for(byte device = 0; device < myNumberOfDevices; device++) {
@@ -34,7 +49,7 @@ void LedMatrix::init() {
 void LedMatrix::sendByte (const byte device, const byte reg, const byte data) {
     int offset=device;
     int maxbytes=myNumberOfDevices;
-    
+
     for(int i=0;i<maxbytes;i++) {
         spidata[i] = (byte)0;
         spiregister[i] = (byte)0;
@@ -50,7 +65,7 @@ void LedMatrix::sendByte (const byte device, const byte reg, const byte data) {
         SPI.transfer (spidata[i]);
     }
     digitalWrite (mySlaveSelectPin, HIGH);
-    
+
 }
 
 void LedMatrix::sendByte (const byte reg, const byte data) {
@@ -87,13 +102,13 @@ void LedMatrix::calculateTextAlignmentOffset() {
             myTextAlignmentOffset = - myText.length() * myCharWidth;
             break;
     }
-    
+
 }
 
 void LedMatrix::clear() {
     for (byte col = 0; col < myNumberOfDevices * 8; col++) {
         cols[col] = 0;
-    }    
+    }
 }
 
 void LedMatrix::commit() {
@@ -172,11 +187,11 @@ void LedMatrix::setRotation(bool enabled) {
 	rotationIsEnabled = enabled;
 }
 
-void LedMatrix::rotateLeft() {	
-	for (byte deviceNum = 0; deviceNum < myNumberOfDevices; deviceNum++) {		
+void LedMatrix::rotateLeft() {
+	for (byte deviceNum = 0; deviceNum < myNumberOfDevices; deviceNum++) {
 		for(byte posY = 0; posY < 8; posY++) {
 			for(byte posX = 0; posX < 8; posX++) {
-				bitWrite(rotatedCols[8 * (deviceNum) + posY], posX, bitRead(cols[8 * (deviceNum) + 7-posX], posY));						
+				bitWrite(rotatedCols[8 * (deviceNum) + posY], posX, bitRead(cols[8 * (deviceNum) + 7-posX], posY));
 			}
 		}
 	}
