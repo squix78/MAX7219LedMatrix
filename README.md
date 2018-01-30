@@ -1,19 +1,20 @@
 # MAX7219LedMatrix
-Library for the ESP8266 on Arduino IDE displaying text on one or multiple MAX7219 8x8 led matrices.
+Library for the ESP8266 & ESP32 on Arduino IDE displaying text on one or multiple MAX7219 8x8 led matrices.
 
 This library displays text and sets specific pixels on one or multiple 8x8 led matrices with a MAX7219 driver chip controlled through the SPI interface.
 These modules are relatively cheep and can be daisy chained which makes it easy to get a led text bar up and running
 You can find modules e.g. with [Banggood](http://www.banggood.com/2Pcs-MAX7219-Dot-Matrix-MCU-LED-Display-Control-Module-Kit-For-Arduino-p-945280.html?p=0P21061109440201501M) (<-affiliate link).
 
-For details about the MAX7219 theory, wiring, schematic, etc. there's a great post by Nick Gammon: http://www.gammon.com.au/forum/?id=11516 
-  
+For details about the MAX7219 theory, wiring, schematic, etc. there's a great post by Nick Gammon: http://www.gammon.com.au/forum/?id=11516
+
 Currently this library supports the following operations:
 
-- set pixels
-- write text with a simple font
-- scroll text left or right 
-- oscillate text between the two ends
-  
+- Set pixels
+- Write text with a simple font
+- Scroll text left or right
+- Oscillate text between the two ends
+- Rotate pixels (works with the 4 displays in one module)
+
 You're welcome to [read in my blog](http://blog.squix.ch/2015/04/esp8266arduino-max7219-8x8-led-matrix.html) how this library came about.
 
 ## Example
@@ -25,6 +26,8 @@ You're welcome to [read in my blog](http://blog.squix.ch/2015/04/esp8266arduino-
 #define NUMBER_OF_DEVICES 1
 #define CS_PIN 2
 LedMatrix ledMatrix = LedMatrix(NUMBER_OF_DEVICES, CS_PIN);
+// Can also use software SPI
+// LedMatrix ledMatrix = LedMatrix(NUMBER_OF_DEVICES, CLK_PIN, MISO_PIN, MOSI_PIN, CS_PIN);
 
 void setup() {
   Serial.begin(115200); // For debugging output
